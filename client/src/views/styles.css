@@ -1,0 +1,120 @@
+* {
+    padding: 0;
+    margin: 0;
+    color: goldenrod;
+    font-family: 'Elden Ring';
+}
+
+@font-face {
+    font-family: 'Elden Ring';
+    src: url(../fonts/Mantinia\ Regular.ttf);
+}
+
+.regFont {
+    font-family: sans-serif;
+    background-color: #133536;
+}
+.fontBack {
+    background-color: #133536;
+}
+
+.head {
+    border-style: solid ;
+    border-color: goldenrod;
+    margin-bottom: 20px;
+    /* width: 100%; */
+}
+
+.center, .list {
+    margin: 0, auto, 0, auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    background-color: rgb(128, 128, 128, .80);
+    border: solid;
+    border-color: goldenrod;
+}
+
+.list {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-right: 5px;
+}
+
+p, label, select, input, button {
+    font-size: 150%;
+}
+
+.rows{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px;
+    /* background-color: red; */
+}
+
+.catList{
+    align-items: flex-start;
+}
+
+.info{
+    align-items: flex-start;
+}
+
+.welcome {
+    margin-top: 10px;
+}
+
+li {
+    list-style-type: none;
+}
+
+option {
+    cursor: pointer;
+}
+
+.noLine {
+    text-decoration: none;
+    color: goldenrod;
+}
+
+.noBtn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 100%;
+    /* color: #000; */
+}
+
+.favBtn, .searchBtn, .logBtn {
+    background-color: #133536;
+    padding: 10px;
+    align-self: center;
+    border-style: solid ;
+    border-color: goldenrod;
+}
+.logBtn {
+    margin-top:5px;
+}
+
+.searchBtn {
+    margin-left:5px;
+}
+
+.linkSpace {
+    margin: 5px, 5px, 5x, 5px;
+}
+
+img {
+    width: 25vw;
+    height: 25vw;
+}
+
+.maidenless {
+    display: flex;
+    width: 500px;
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
