@@ -23,6 +23,7 @@ import Results from "./views/Results";
 import Register from './views/Register';
 import Login from './views/Login';
 import Cookie from './views/Cookies';
+import Favorites from "./views/favorites";
 
 
 
@@ -41,7 +42,10 @@ function App() {
       <BrowserRouter>
         <Header/>
         <Switch>
-        <Route path="/register">
+          <Route path="/favorites">
+            <Favorites />
+          </Route>
+          <Route path="/register">
             <Register />
           </Route>
           <Route path="/login">

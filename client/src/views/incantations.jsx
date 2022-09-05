@@ -48,7 +48,7 @@ const Incantations = () => {
                         <p>Effects: {incantation.data.effects}</p>
                         <p>Attack Damage Types:
                             {incantation.data.requires.length > 0 && incantation.data.requires.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                     </div>

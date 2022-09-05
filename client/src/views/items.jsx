@@ -9,10 +9,18 @@ const Items = () => {
     const [item, setItem] = useState()
     const [cookie, setCookie] = useState()
 
-    const favoriteClick = (e) => {
-        console.log(e);
-        alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+    const favoriteClick = (itemId) => {
+        // console.log(itemId);
+        // alert(`${e} Favorited`);
+        // axios.put(`http://localhost:8000/api/favorites`, {withCredentials: true})
+        axios({
+            method: 'put',
+            url: `http://localhost:8000/api/favorites`,
+            withCredentials: true,
+            data: {
+                itemId
+            }
+        });
     }
 
     useEffect(() => {
@@ -33,7 +41,7 @@ const Items = () => {
                     <div className="col-4">
                         {
                             cookie &&
-                            <button className="favBtn" value={item.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
+                            <button className="favBtn" value={item.data.id} onClick={() => {favoriteClick(item.data.id)}}>
                                 Favorite?
                             </button>
                         }

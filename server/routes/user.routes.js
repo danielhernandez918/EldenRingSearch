@@ -14,8 +14,9 @@ module.exports = app =>{
     app.get(`/api/logout`, authenticate, UserController.logout)
 
     //route to get users favorites
-    app.get(`/api/jobs/:userId/favorites`, authenticate, UserController.getAllFavorites)
     app.get(`/api/favorites/:userId`, authenticate, FavoriteController.favoritesOfOneUser)
-    app.post(`/api/favorites/:userId`, authenticate, FavoriteController.addFavorite)
+    app.post(`/api/favorites`, authenticate, FavoriteController.addFavorite)
     // app.get("/api/favorites", FavoriteController.allFavorites)
+    // app.delete("/api/favorites", UserController.addFavorite)
+    // app.put("/api/favorites", UserController.addFavorite)
 }

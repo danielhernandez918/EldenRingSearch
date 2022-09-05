@@ -46,12 +46,12 @@ const Armors = () => {
                         <p>Weight: {armor.data.weigth}</p>
                         <p>Damage Negations:
                             {armor.data.dmgNegation.length > 0 && armor.data.dmgNegation.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                         <p>Resistances:
                             {armor.data.resistance.length > 0 && armor.data.resistance.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                     </div>

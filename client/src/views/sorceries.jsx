@@ -47,7 +47,7 @@ const Sorceries = () => {
                         <p>Effects: {sorcery.data.effects}</p>
                         <p>Attack Damage Types:
                             {sorcery.data.requires.length > 0 && sorcery.data.requires.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                     </div>

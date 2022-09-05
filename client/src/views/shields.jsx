@@ -45,22 +45,22 @@ const Shields = () => {
                         <p>Weight: {shield.data.weigth}</p>
                         <p>Attack Damage Types:
                             {shield.data.attack.length > 0 && shield.data.attack.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                         <p>Defense Types:
                             {shield.data.defence.length > 0 && shield.data.defence.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                         <p>Required Attributes:
                             {shield.data.requiredAttributes.length > 0 && shield.data.requiredAttributes.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.amount}</div>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </p>
                         <p>Scales With:
                             {shield.data.scalesWith.length > 0 && shield.data.scalesWith.map((type, index)=>{
-                                return (<div key={index}>{type.name}: {type.scaling}</div>)
+                                return (<li key={index}>{type.name}: {type.scaling}</li>)
                             })}
                         </p>
                     </div>

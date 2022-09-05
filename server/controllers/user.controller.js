@@ -1,6 +1,8 @@
 const {User} = require('./../models/user.model')
+// const { Favorite} = require("../models/favorite.model")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const jwt_decode = require("jwt-decode");
 
 
 module.exports.register = (req, res)=>{
@@ -80,8 +82,38 @@ module.exports.deleteUser = (req,res) => {
         .catch(err=>res.status(400).json(err))
 }
 
-module.exports.getAllFavorites = (req, res) => {
-    Job.findOne({_id: req.params.userId}).populate('favorites')
-        .then(foundUser=>res.json(foundUser))
-        .catch(err=>res.status(400).json(err))
+// module.exports.getAllFavorites = (req, res) => {
+//     Job.findOne({_id: req.params.userId}).populate('favorites')
+//         .then(foundUser=>res.json(foundUser))
+//         .catch(err=>res.status(400).json(err))
+// }
+
+module.exports.addFavorite = async(req, res) => {
+    try{
+        const newItem = await Item.findOne({id:req.body.itemId})
+        console.log(newItem)
+        
+        const decoded = jwt_decode(req.cookies.userToken)
+        const newUser = await User.findOne({_id:decoded.id})
+        console.log(newUser)
+        let favoriteIndex = -1;
+        const {favorites} = newUser;
+
+        for (let i = 0; i < favorites.length; i++) {
+            if (newUser.favorites[i].equals(newItem)) {
+                favoriteIndex = i;
+                break;
+            }
+        }
+        console.log(favoriteIndex);
+        if(favoriteIndex === -1){
+            await User.findOneAndUpdate({_id:decoded.id}, {$push: {favorites: newItem}}, {new: true})
+        } 
+
+        
+        res.sendStatus(204)
+    }catch(err){
+        res.status(400).json(err)
+    }
+
 }

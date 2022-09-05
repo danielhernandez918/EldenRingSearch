@@ -12,7 +12,7 @@ const Weapons = () => {
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/favorites`, {withCredentials: true})
     }
 
     useEffect(() => {
@@ -47,25 +47,25 @@ const Weapons = () => {
                         <div>
                             <p>Armor Damage Types:</p>
                             {weapon.data.attack.length > 0 && weapon.data.attack.map((type, index)=>{
-                                return (<p key={index}>{type.name}: {type.amount}</p>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </div>
                         <div>
                             <p>Defense Types:</p>
                             {weapon.data.defence.length > 0 && weapon.data.defence.map((type, index)=>{
-                                return (<p key={index}>{type.name}: {type.amount}</p>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </div>
                         <div>
                             <p>Required Attributes:</p>
                             {weapon.data.requiredAttributes.length > 0 && weapon.data.requiredAttributes.map((type, index)=>{
-                                return (<p key={index}>{type.name}: {type.amount}</p>)
+                                return (<li key={index}>{type.name}: {type.amount}</li>)
                             })}
                         </div>
                         <div>
                             <p>Scales With:</p>
                             {weapon.data.scalesWith.length > 0 && weapon.data.scalesWith.map((type, index)=>{
-                                return (<p key={index}>{type.name}: {type.scaling}</p>)
+                                return (<li key={index}>{type.name}: {type.scaling}</li>)
                             })}
                         </div>
                     </div>

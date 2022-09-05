@@ -1,5 +1,7 @@
 const { Favorite} = require("../models/favorite.model")
 const { User } = require("../models/user.model")
+const jwt = require("jsonwebtoken")
+const jwt_decode = require("jwt-decode");
 
 // module.exports.allFavorites = (req, res) => {
 //     Favorite.find()
@@ -19,10 +21,18 @@ module.exports.favoritesOfOneUser = (req, res) => {
 module.exports.addFavorite = async(req, res) => {
     try{
         const newFavorite = new Favorite(req.body)
+
+        // const decoded = jwt_decode(req.cookies.userToken)
+        // const newUser = await User.findOne({_id:decoded.id})
+
+
         newFavorite.user = req.params.userId
         await newFavorite.save()
     
-        const user = await User.findOne({_id:req.params.userId})
+        const decoded = jwt_decode(req.cookies.userToken)
+        const user = await User.findOne({_id:decoded.id})
+        console.log(user)
+        // const user = await User.findOne({_id:req.params.userId})
         user.favorites.push(newFavorite)
         await user.save()
         
