@@ -7,12 +7,14 @@ const Spirits = () => {
 
     const {id} = useParams()
     const [spirit, setSpirits] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/users/favorites`, spirit.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     useEffect(() => {
@@ -21,10 +23,18 @@ const Spirits = () => {
                 setSpirits(response.data) })
             .catch(err => {console.log(err) 
                 setSpirits(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
+    //[id] should only change when id changes
     }, [id])
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
     return (
         <div className="center">
@@ -32,12 +42,12 @@ const Spirits = () => {
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={spirit.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={spirit.data.image} />
+                        <img src={spirit.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {spirit.data.name}</h2>

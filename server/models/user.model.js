@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const UserSchema = new Schema({
     userName: {
@@ -22,28 +23,54 @@ const UserSchema = new Schema({
         minlength: [8, "Password must be at least 8 characters"]
     },
     favorites:[{
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'Favorite'
     }]
 },{timestamps : true});
 
-UserSchema.virtual('confirmPassword')
-    .get( () => this._confirmPassword )
-    .set( value => this._confirmPassword = value );
+// UserSchema.virtual('confirmPassword')
+//     .get( () => this._confirmPassword )
+//     .set( value => this._confirmPassword = value );
+
+// UserSchema.pre('validate', function(next) {
+//     if (this.password !== this.confirmPassword) {
+//         this.invalidate('confirmPassword', 'Password must match confirm password');
+//     }
+//     next();
+// });
 
 UserSchema.pre('validate', function(next) {
-    if (this.password !== this.confirmPassword) {
-        this.invalidate('confirmPassword', 'Password must match confirm password');
+    if (this.isNew) { // Check if user is new
+        if (!this.password) {
+            // If password is not set, then create a validation error
+            this.invalidate('password', 'Password is required');
+        }
+
+        if (this.password !== this.confirmPassword) {
+            this.invalidate('confirmPassword', 'Password must match confirm password');
+        }
     }
+
     next();
 });
 
-UserSchema.pre('save', function(next) {
-    bcrypt.hash(this.password, 10)
-        .then(hash => {
-        this.password = hash;
-        next();
-        });
+
+UserSchema.pre('save', function (next) {
+    const user = this;
+
+    // Only run the match validator if the password field is present
+    if (!user.isModified('password')) {
+    return next();
+    }
+
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
+    if (err) {
+        return next(err);
+    }
+
+    user.password = hash;
+    next();
+    });
 });
 
 

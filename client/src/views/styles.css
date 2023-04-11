@@ -118,3 +118,10 @@ img {
     margin-right: auto;
 }
 
+.deleteButton {
+    background-color: #133536;
+    font-size: 100%;
+    margin-left: 10px;
+    padding: 5px;
+}
+

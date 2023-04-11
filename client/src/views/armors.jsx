@@ -4,15 +4,16 @@ import {useParams} from 'react-router-dom'
 import './styles.css';
 
 const Armors = () => {
-
     const {id} = useParams()
     const [armor, setArmor] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/users/favorites`, armor.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     useEffect(() => {
@@ -21,10 +22,18 @@ const Armors = () => {
                 setArmor(response.data) })
             .catch(err => {console.log(err) 
                 setArmor(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
+    //[id] should only change when id changes
     }, [id])
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
     return (
         <div className="center">
@@ -32,18 +41,18 @@ const Armors = () => {
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={armor.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={armor.data.image} />
+                        <img src={armor.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {armor.data.name}</h2>
                         <p>Description: {armor.data.description}</p>
                         <p>Category: {armor.data.category}</p>
-                        <p>Weight: {armor.data.weigth}</p>
+                        <p>Weight:{armor.data.weigth}</p>
                         <p>Damage Negations:
                             {armor.data.dmgNegation.length > 0 && armor.data.dmgNegation.map((type, index)=>{
                                 return (<li key={index}>{type.name}: {type.amount}</li>)

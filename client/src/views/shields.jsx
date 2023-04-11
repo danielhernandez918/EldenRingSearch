@@ -7,23 +7,34 @@ const Shields = () => {
 
     const {id} = useParams()
     const [shield, setShield] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/users/favorites`, shield.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
+
     useEffect(() => {
         axios.get(`https://eldenring.fanapis.com/api/shields/${id}`)
             .then(response=> {console.log(response.data) 
                 setShield(response.data) })
             .catch(err => {console.log(err) 
                 setShield(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
+    //[id] should only change when id changes
     }, [id])
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
     return (
         <div className="center">
@@ -31,12 +42,12 @@ const Shields = () => {
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={shield.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={shield.data.image} />
+                        <img src={shield.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {shield.data.name}</h2>

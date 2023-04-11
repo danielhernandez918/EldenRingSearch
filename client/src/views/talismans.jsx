@@ -7,12 +7,14 @@ const Talismans = () => {
 
     const {id} = useParams()
     const [talisman, setTalismans] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/users/favorites`, talisman.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     useEffect(() => {
@@ -21,10 +23,18 @@ const Talismans = () => {
                 setTalismans(response.data) })
             .catch(err => {console.log(err) 
                 setTalismans(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
+    //[id] should only change when id changes
     }, [id])
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
     return (
         <div className="center">
@@ -32,12 +42,12 @@ const Talismans = () => {
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={talisman.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={talisman.data.image} />
+                        <img src={talisman.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {talisman.data.name}</h2>

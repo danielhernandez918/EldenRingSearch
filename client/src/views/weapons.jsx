@@ -7,24 +7,34 @@ const Weapons = () => {
 
     const {id} = useParams()
     const [weapon, setWeapon] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        axios.post(`http://localhost:8000/api/favorites`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/users/favorites`, weapon.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     useEffect(() => {
-        axios.get(`https://eldenring.fanapis.com/api/weapons/${id}?limit=200`)
+        axios.get(`https://eldenring.fanapis.com/api/weapons/${id}`)
             .then(response=> {console.log(response.data) 
                 setWeapon(response.data) })
             .catch(err => {console.log(err) 
                 setWeapon(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
-    },[id])
+    //[id] should only change when id changes
+    }, [id])
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
     return (
         <div className="center">
@@ -32,12 +42,12 @@ const Weapons = () => {
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={weapon.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={weapon.data.image} />
+                        <img src={weapon.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {weapon.data.name}</h2>

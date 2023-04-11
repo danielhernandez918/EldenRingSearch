@@ -7,23 +7,34 @@ const Sorceries = () => {
 
     const {id} = useParams()
     const [sorcery, setSorceries] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
     const favoriteClick = (e) => {
         console.log(e);
         alert(`${e} Favorited`);
-        // axios.post(`http://localhost:8000/api/favorites/${userId}`, {withCredentials: true})
+        axios.post(`http://localhost:8000/api/users/favorites`, sorcery.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
+
     useEffect(() => {
         axios.get(`https://eldenring.fanapis.com/api/sorceries/${id}`)
             .then(response=> {console.log(response.data) 
                 setSorceries(response.data) })
             .catch(err => {console.log(err) 
                 setSorceries(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
+    //[id] should only change when id changes
     }, [id])
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
     return (
         <div className="center">
@@ -31,12 +42,12 @@ const Sorceries = () => {
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={sorcery.data.name} onClick={(e) => {favoriteClick(e.target.value)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={sorcery.data.image} />
+                        <img src={sorcery.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {sorcery.data.name}</h2>

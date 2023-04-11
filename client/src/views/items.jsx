@@ -7,20 +7,14 @@ const Items = () => {
 
     const {id} = useParams()
     const [item, setItem] = useState()
-    const [cookie, setCookie] = useState()
+    const [userData, setUserData] = useState(null);
 
-    const favoriteClick = (itemId) => {
-        // console.log(itemId);
-        // alert(`${e} Favorited`);
-        // axios.put(`http://localhost:8000/api/favorites`, {withCredentials: true})
-        axios({
-            method: 'put',
-            url: `http://localhost:8000/api/favorites`,
-            withCredentials: true,
-            data: {
-                itemId
-            }
-        });
+    const favoriteClick = (e) => {
+        console.log(e);
+        alert(`${e} Favorited`);
+        axios.post(`http://localhost:8000/api/users/favorites`, item.data, {withCredentials: true})
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     useEffect(() => {
@@ -29,23 +23,30 @@ const Items = () => {
                 setItem(response.data) })
             .catch(err => {console.log(err) 
                 setItem(err.data) })
-        axios.get(`http://localhost:8000/api/cookie`,{withCredentials:true})
-            .then(res=> setCookie(true) )
-            .catch(res=> setCookie(false) )
+    //[id] should only change when id changes
     }, [id])
 
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
     return (
         <div className="center">
             {item ?
                 <div className="rows info">
                     <div className="col-4">
                         {
-                            cookie &&
+                            userData &&
                             <button className="favBtn" value={item.data.id} onClick={() => {favoriteClick(item.data.id)}}>
                                 Favorite?
                             </button>
                         }
-                        <img src={item.data.image} />
+                        <img src={item.data.image} alt="itemImage"/>
                     </div>
                     <div>
                         <h2>Name: {item.data.name}</h2>

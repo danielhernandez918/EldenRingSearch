@@ -1,42 +1,51 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import './styles.css';
 
 
 const Favorites = () => {
-    const [user, setUser] = useState()
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/allUsers/:id`, { withCredentials: true })
-            .then(res => setUser(res.data))
-            .catch(err => console.log(err))
-    }, [])
+        axios.get(`http://localhost:8000/api/loggedUser`, { withCredentials: true })
+            .then(res => {
+            setUserData(res.data);
+            })
+            .catch(err => {
+            console.log(err);
+            });
+    }, []);
 
-    // const handleDelete = (plantId) => {
-    //     console.log(plantId);
-    //     axios({
-    //         method: 'delete',
-    //         url: `http://localhost:8000/api/favorites`,
-    //         withCredentials: true,
-    //         data: {
-    //             plantId
-    //         }
-    //     });
-    // }
+    const handleDelete = (item) => {
+        // console.log(item);
+        axios({
+          method: 'delete',
+          url: 'http://localhost:8000/api/users/favorites',
+          withCredentials: true,
+          data: {
+            itemId: item // pass the ID of the item to remove in the request body
+          }
+        })
+          .then(res => {
+            setUserData(res.data); // update the user data in state with the updated user object returned from the server
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      };
 
     return (
-        <div className='typeContainer'>
+        <div className='list'>
             <h2> Favorites</h2>
             <div className='FavoriteContainer'>
                 {
-                    user &&
-                    user.favorites.map((item, i) => (
+                    userData &&
+                    userData.favorites.map((item, i) => (
                         <div className='Items' key={i}>
-                            <p>
-                                <>{item.name}</>
-                            </p>
-                            {/* <img src={plant.picture} alt="Plant image" /> */}
-                            {/* <button type="button" onClick={() => handleDelete(plant._id)}>Delete</button> */}
+                            <h2>
+                                <>{item}</>
+                                <button type="button" className="deleteButton" onClick={() => handleDelete(item)}>Delete</button>
+                            </h2>
                         </div>
                     ))
                 }
